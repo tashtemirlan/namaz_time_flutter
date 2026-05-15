@@ -1,0 +1,125 @@
+{
+  "app_name": "Prayer Times",
+
+  "prayers": {
+    "fajr": "Fajr",
+    "sunrise": "Sunrise",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha"
+  },
+
+  "nav": {
+    "home": "Home",
+    "qibla": "Qibla",
+    "location": "Location",
+    "settings": "Settings"
+  },
+
+  "home": {
+    "title": "Prayer Times",
+    "today": "Today",
+    "next_prayer": "Next prayer",
+    "in_time": "in {time}",
+    "now": "Now",
+    "passed": "Passed",
+    "no_location": "Location not set",
+    "no_location_hint": "Select a city to display prayer times",
+    "select_location": "Select location",
+    "hijri_date": "{day} {month} {year} AH",
+    "prayer_times": "Prayer Times",
+    "loading": "Loading...",
+    "error": "Failed to load",
+    "retry": "Retry",
+    "all_passed": "All prayers done for today",
+    "progress": "Day progress"
+  },
+
+  "qibla": {
+    "title": "Qibla",
+    "subtitle": "Direction to Mecca",
+    "degrees": "{degrees}° from North",
+    "compass_permission": "Compass access needed",
+    "no_sensor": "Compass sensor not available",
+    "calibrate": "Move in figure-8 to calibrate",
+    "mecca": "Mecca",
+    "location_needed": "Set your location to calculate Qibla direction",
+    "aligned": "✓ Direction correct",
+    "use_gps": "Use GPS",
+    "using_gps": "GPS • accuracy {m} m",
+    "using_city": "City: {city}"
+  },
+
+  "location": {
+    "title": "Location",
+    "select_country": "Select country",
+    "select_region": "Select region",
+    "select_city": "Select city",
+    "search_hint": "Search...",
+    "kyrgyzstan": "Kyrgyzstan",
+    "worldwide": "Other countries",
+    "saved": "Saved",
+    "big_cities": "Major cities",
+    "batken": "Batken Region",
+    "jalal_abad": "Jalal-Abad Region",
+    "naryn": "Naryn Region",
+    "osh": "Osh Region",
+    "talas": "Talas Region",
+    "chuy": "Chuy Region",
+    "issyk_kul": "Issyk-Kul Region",
+    "osh_city": "Osh (city)"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "dark_mode": "Dark mode",
+    "language": "Language",
+    "lang_ru": "Русский",
+    "lang_ky": "Кыргызча",
+    "lang_en": "English",
+    "notifications": "Notifications",
+    "notify_before": "Remind {min} min before",
+    "prayer_reminders": "Prayer reminders",
+    "sound": "Notification sound",
+    "sound_toggle": "Play sound",
+    "sound_hint": "Off — vibration only",
+    "azan_ringtone": "Azan ringtone",
+    "azan_ringtone_default": "Default ringtone",
+    "reset_azan_ringtone": "Use default ringtone",
+    "test_notification": "Test notification",
+    "test_notification_hint": "Play current Azan sound now",
+    "about": "About",
+    "version": "Version {v}",
+    "developed_by": "Developed by Temirlan Tashtanov",
+    "calculation_method": "Calculation method",
+    "method_mf": "Muftiyat KR",
+    "method_aladhan": "AlAdhan"
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "back": "Back"
+  },
+
+  "months_hijri": {
+    "1": "Muharram",
+    "2": "Safar",
+    "3": "Rabi al-Awwal",
+    "4": "Rabi al-Thani",
+    "5": "Jumada al-Ula",
+    "6": "Jumada al-Thaniyya",
+    "7": "Rajab",
+    "8": "Sha'ban",
+    "9": "Ramadan",
+    "10": "Shawwal",
+    "11": "Dhu al-Qa'da",
+    "12": "Dhu al-Hijja"
+  }
+}
