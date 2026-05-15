@@ -26,7 +26,7 @@ class NotificationService {
     tz_data.initializeTimeZones();
     _setLocalTimezone();
 
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const android = AndroidInitializationSettings('@drawable/ic_stat_namaztime');
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -138,7 +138,7 @@ class NotificationService {
                 channelDescription: 'Reminders for each prayer time',
                 importance: Importance.high,
                 priority: Priority.high,
-                icon: '@mipmap/ic_launcher',
+                icon: '@drawable/ic_stat_namaztime',
                 playSound: soundOn,
                 sound: soundOn && customSoundUri != null
                     ? UriAndroidNotificationSound(customSoundUri)
@@ -167,7 +167,7 @@ class NotificationService {
               channelDescription: 'Reminders for each prayer time',
               importance: Importance.high,
               priority: Priority.high,
-              icon: '@mipmap/ic_launcher',
+              icon: '@drawable/ic_stat_namaztime',
               playSound: soundOn,
               sound: soundOn && customSoundUri != null
                   ? UriAndroidNotificationSound(customSoundUri)
@@ -283,7 +283,7 @@ class NotificationService {
           channelDescription: 'Test reminder notification',
           importance: Importance.high,
           priority: Priority.high,
-          icon: '@mipmap/ic_launcher',
+          icon: '@drawable/ic_stat_namaztime',
           playSound: soundOn,
           sound: soundOn && customSoundUri != null
               ? UriAndroidNotificationSound(customSoundUri)
