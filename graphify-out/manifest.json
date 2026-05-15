@@ -1,0 +1,382 @@
+{
+  "/Users/timaakatsuki/StudioProjects/namaztime/test/widget_test.dart": {
+    "mtime": 1778819814.7726746,
+    "hash": "56de9350c2c19d70f0941f998c06e158"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/RunnerTests/RunnerTests.swift": {
+    "mtime": 1778816933.8332596,
+    "hash": "a225a382d14d7b16b6f602a5c1d49331"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Runner-Bridging-Header.h": {
+    "mtime": 1755937124.3112104,
+    "hash": "e07862ac930ed4d8479185d52c6cc66d"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/GeneratedPluginRegistrant.h": {
+    "mtime": 1778816935.5653064,
+    "hash": "decb9041b5e91a07e66f4664e5dac408"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/AppDelegate.swift": {
+    "mtime": 1776333509.9102633,
+    "hash": "2bd8469f2a4b701ff582f6574e58b13c"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/GeneratedPluginRegistrant.m": {
+    "mtime": 1778831535.3250587,
+    "hash": "0398a6b2406dd2f6d7837ecc832e9b1c"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/SceneDelegate.swift": {
+    "mtime": 1776333509.9105082,
+    "hash": "748d701e783e68faf618c00464257a19"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Flutter/ephemeral/flutter_lldb_helper.py": {
+    "mtime": 1778816935.469374,
+    "hash": "98fc75412162af387e2e3461e4e58094"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/gradlew": {
+    "mtime": 1778816933.8704982,
+    "hash": "7f1cd7eb3f75a1dc85cd37753972a6e2"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/build.gradle.kts": {
+    "mtime": 1778816933.8597822,
+    "hash": "f11f360aed44d4f6871b398346af14f0"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/settings.gradle.kts": {
+    "mtime": 1778816933.858488,
+    "hash": "094e3cafe85d4dbf756dfe0bd754c6cb"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/build.gradle.kts": {
+    "mtime": 1778825353.89449,
+    "hash": "d6a351f095380e2fba8814ea6beb2a17"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java": {
+    "mtime": 1778831535.3232927,
+    "hash": "c1c54af796cf59997fd729dbfd256233"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/src/main/kotlin/kg/teitcorp/namaztime/MainActivity.kt": {
+    "mtime": 1778816933.8607125,
+    "hash": "67ca26f646d27d8e070d4e2c211ffc4c"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/main.dart": {
+    "mtime": 1778831512.958976,
+    "hash": "492b172778110c12119458524893e45d"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/navigation/app_bottom_nav_bar.dart": {
+    "mtime": 1778819139.7346082,
+    "hash": "9ca990466c1b0b69ed0de03c1f321a47"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/screens/settings/settings_screen.dart": {
+    "mtime": 1778830534.1928093,
+    "hash": "5dfd0bb20953e3623ca7ccc055e8f7c7"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/screens/home/home_screen.dart": {
+    "mtime": 1778826291.2535307,
+    "hash": "34eca064371f920be0ccb59e3d6308b0"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/screens/location/location_picker_screen.dart": {
+    "mtime": 1778826409.8904793,
+    "hash": "a6dbdd31fb969bea2ee5cc9b58ed8d62"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/screens/qibla/qibla_screen.dart": {
+    "mtime": 1778826440.7417865,
+    "hash": "7713fec65aeab7ea8ae257f795d56286"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/theme/app_extensions.dart": {
+    "mtime": 1778818673.7596798,
+    "hash": "b8a731cb897e2d96a196f145cec250d6"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/theme/app_theme.dart": {
+    "mtime": 1778818680.0991385,
+    "hash": "3282dc52436263e531d0fe6628c5852a"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/theme/app_colors.dart": {
+    "mtime": 1778818670.71489,
+    "hash": "145138ff5e9cf78a4c96d4b4284a6bfc"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/widgets/app/app_text_field.dart": {
+    "mtime": 1778818709.2885828,
+    "hash": "4571b587e9eab34d22b01fd5a5cafee9"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/widgets/app/app_button.dart": {
+    "mtime": 1778818700.7750306,
+    "hash": "569e9c7db5b378a9ef489dab9ed584df"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/widgets/app/app_snack_bar.dart": {
+    "mtime": 1778818715.6270695,
+    "hash": "1b4577825f4d98f5e327cf0e6031cc78"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/ui/widgets/app/app_text.dart": {
+    "mtime": 1778818688.8013787,
+    "hash": "95edf5bf7c5c57007a26244a494c1207"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/providers/location_provider.dart": {
+    "mtime": 1778818929.6153316,
+    "hash": "3aab853931a89dcbeb81d9b15e87862b"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/providers/prayer_provider.dart": {
+    "mtime": 1778818941.5852063,
+    "hash": "cc8ff120b9c34855400f02c8b572dfe5"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/providers/settings_provider.dart": {
+    "mtime": 1778828115.2324588,
+    "hash": "be1fd98dcb51a3f527ca4d5bf3532b69"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/repositories/prayer_times_repository.dart": {
+    "mtime": 1778831880.6474292,
+    "hash": "5b1aeb7aa5f8c8802c713d333945e2a5"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/models/location_model.dart": {
+    "mtime": 1778818797.530183,
+    "hash": "df93bec4d746b733c45fdd1672364ebf"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/models/prayer_time_model.dart": {
+    "mtime": 1778827975.641562,
+    "hash": "8c79c2d6d98a72f32b727c8a7f408ff1"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/data/kg_locations.dart": {
+    "mtime": 1778818855.9495862,
+    "hash": "4c796bc84204862d778976f29d165edc"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/data/world_locations.dart": {
+    "mtime": 1778818890.1290576,
+    "hash": "e3e3adb1436e1af856a8ac936275ae50"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/global/app_settings.dart": {
+    "mtime": 1778831501.23869,
+    "hash": "20112d5dcbe6c40b1e3d8f0905e47c7a"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/services/qibla_service.dart": {
+    "mtime": 1778818957.8112063,
+    "hash": "30810c414fc9dedb6ae12dca05d50887"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/services/notification_service.dart": {
+    "mtime": 1778831302.5106366,
+    "hash": "f24287978953822cc5536127171aed3c"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/lib/services/background_refresh_service.dart": {
+    "mtime": 1778831552.0658123,
+    "hash": "53737152808b2be71de04231964f026e"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/devtools_options.yaml": {
+    "mtime": 1778825532.9124577,
+    "hash": "d1ff5187b1b67653e7357395895e8449"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/README.md": {
+    "mtime": 1778816933.8622274,
+    "hash": "151164dd914c1a08bac30729ae47f61e"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/pubspec.yaml": {
+    "mtime": 1778831495.1904483,
+    "hash": "6731f385b210f8240b42e63fadce2491"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/analysis_options.yaml": {
+    "mtime": 1778816933.8640785,
+    "hash": "66d03d7647c8e438164feaf5b922d44a"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/Design.md": {
+    "mtime": 1778174088.3811483,
+    "hash": "a9727b721747a4c36841fc314a359dfd"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/AGENTS.md": {
+    "mtime": 1778827199.2694497,
+    "hash": "6f890a302df38f9ab049bb2a20e63f5b"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/CLAUDE.md": {
+    "mtime": 1778817064.797198,
+    "hash": "19a007311e8423f944c0c26b65ba7521"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md": {
+    "mtime": 1742053713.9772484,
+    "hash": "e175e436acacf76c814d83532d0b662c"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/00_PROJECT_PHILOSOPHY.md": {
+    "mtime": 1778229218.0874527,
+    "hash": "3cae258440bbe6065a3a5d499d8bb87e"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/14_SCALING_STRATEGY.md": {
+    "mtime": 1778230219.739265,
+    "hash": "f2a855c7a0b67e8c04a4ffbfe301bf0d"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/10_NAMING_CONVENTIONS.md": {
+    "mtime": 1778230010.411493,
+    "hash": "ce862fb80a599b2cd83b59c7c2bbe8b7"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/01_BASE_ARCHITECTURE.md": {
+    "mtime": 1778229264.9956865,
+    "hash": "21eedc4ba9e420fb33835709991aae19"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/08_PERFORMANCE_RULES.md": {
+    "mtime": 1778229928.8641045,
+    "hash": "5727921b6ae773fd938112e32977daaf"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/07_ERROR_HANDLING.md": {
+    "mtime": 1778229868.6588209,
+    "hash": "1ec99a8c2c20d149647908f64fae33aa"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/03_STATE_MANAGEMENT.md": {
+    "mtime": 1778229385.184733,
+    "hash": "820836c26d084f1d74c0a72afff131db"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/09_FOLDER_STRUCTURE.md": {
+    "mtime": 1778229968.2996168,
+    "hash": "bb4112e0216f05c2473b969a9bdf79c4"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/16_LOCALISATION.md": {
+    "mtime": 1778244865.6978784,
+    "hash": "3c32371d5beebbed2a03bc7257c1188a"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/02_DESIGN_SYSTEM.md": {
+    "mtime": 1778229332.8625116,
+    "hash": "0b9b0a396bb588407b38f1d906416e1f"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/04_NAVIGATION_ARCHITECTURE.md": {
+    "mtime": 1778229427.0894241,
+    "hash": "02c3204909010b2e780cff78a76d4b7e"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/05_NETWORK_LAYER.md": {
+    "mtime": 1778229780.8616984,
+    "hash": "eaffa2aad38c9c92879d9c22ab20886e"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/12_SECURITY_GUIDELINES.md": {
+    "mtime": 1778230118.1088154,
+    "hash": "2394c1b51ed8ce2735ec3dcdc5d9b46b"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/15_CODE_REVIEW_CHECKLIST.md": {
+    "mtime": 1778230273.6559103,
+    "hash": "adcb518f94a3b51a19e1c7d7075cb5b4"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/11_WIDGET_STANDARDS.md": {
+    "mtime": 1778230069.307856,
+    "hash": "ad383ecfb972b829c7797f35a9e9aade"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/06_CACHE_OFFLINE_STRATEGY.md": {
+    "mtime": 1778229825.5742788,
+    "hash": "37f39acc80179be0e0dce8cb4d9c1e2e"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/13_AI_RULES.md": {
+    "mtime": 1778230172.6004968,
+    "hash": "f4370dca8765573ad263284cff336bee"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/EngineeringDoctrine/CLAUDE.md": {
+    "mtime": 1778245049.6731045,
+    "hash": "d820e2a26831c06cbb34b0a2085922c7"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png": {
+    "mtime": 1754813322.8732216,
+    "hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png": {
+    "mtime": 1754813322.8694396,
+    "hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png": {
+    "mtime": 1754813322.8737032,
+    "hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@1x.png": {
+    "mtime": 1778821078.8263855,
+    "hash": "3aefb17dbcf6d6d5be28f2a4c914ec68"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png": {
+    "mtime": 1778821078.8264556,
+    "hash": "da885034f85faf6a0476cea78db0a467"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png": {
+    "mtime": 1778821078.82596,
+    "hash": "67bc1cebdee64010e978c5d1a13c00a4"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png": {
+    "mtime": 1778821078.8260024,
+    "hash": "f692d1517037a1b71d43531e13c49c9a"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@1x.png": {
+    "mtime": 1778821078.82638,
+    "hash": "779030b6b31eadeabbe05934c14625c1"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png": {
+    "mtime": 1778821078.8259082,
+    "hash": "2128f5a8f7a3171a6ead4997e8a87417"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@2x.png": {
+    "mtime": 1778821078.8262315,
+    "hash": "854eb3f3ba4299b11d484f7925fe72fb"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png": {
+    "mtime": 1778821078.829696,
+    "hash": "5526ee2a8a0c75f9a208fc7ae50a39a4"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png": {
+    "mtime": 1778821078.826535,
+    "hash": "92d2436774377a7c53cc4ad9e36362cc"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png": {
+    "mtime": 1778821078.8259501,
+    "hash": "aadf343ee461150b30d7fb976a7ae4ea"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@1x.png": {
+    "mtime": 1778821078.8264036,
+    "hash": "c1607bef86eb7f2b9be0d0c8e4710e4a"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png": {
+    "mtime": 1778821078.8259294,
+    "hash": "f692d1517037a1b71d43531e13c49c9a"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png": {
+    "mtime": 1778821078.8259904,
+    "hash": "4620c5737841d83c1460281c72007d8f"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png": {
+    "mtime": 1778821078.826014,
+    "hash": "cc25c413b9aa6b032d14eb7625eac529"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@2x.png": {
+    "mtime": 1778821078.8264265,
+    "hash": "c13094564e07c0360c821a61d92f85c2"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png": {
+    "mtime": 1778821078.826448,
+    "hash": "34378f4eb27042ef4757c6fc2abe3d87"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png": {
+    "mtime": 1778821078.8264556,
+    "hash": "c9908a97a5080bb520f78232133d7264"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@2x.png": {
+    "mtime": 1778821078.8263447,
+    "hash": "f364c6c22669ff14f0a161b9c4310937"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png": {
+    "mtime": 1778821078.8264456,
+    "hash": "b5a9bc22ec539adf83c2591c223d4c75"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png": {
+    "mtime": 1778821078.8260384,
+    "hash": "c9908a97a5080bb520f78232133d7264"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png": {
+    "mtime": 1778821078.8259695,
+    "hash": "cdc2b85e0bbd764c66507875ce010bbb"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/src/main/res/mipmap-mdpi/ic_launcher.png": {
+    "mtime": 1778821078.3299968,
+    "hash": "2f992160e3ef81dacd4b49090b0050b0"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/src/main/res/mipmap-hdpi/ic_launcher.png": {
+    "mtime": 1778821078.3298857,
+    "hash": "779030b6b31eadeabbe05934c14625c1"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": {
+    "mtime": 1778821078.3299773,
+    "hash": "ee199abbf0e724948b3ce84b6336efef"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": {
+    "mtime": 1778821078.329995,
+    "hash": "c13094564e07c0360c821a61d92f85c2"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": {
+    "mtime": 1778821078.32991,
+    "hash": "1ea8d7964d9ed2515786e370d1b02543"
+  },
+  "/Users/timaakatsuki/StudioProjects/namaztime/assets/icon.png": {
+    "mtime": 1778820708.7858312,
+    "hash": "757ff2e85c153da57e71f536ed46e97c"
+  }
+}
