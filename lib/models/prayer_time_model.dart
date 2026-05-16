@@ -66,6 +66,30 @@ class DailyPrayerTimes {
     );
   }
 
+  /// Serialize to JSON for local caching (Hive).
+  Map<String, dynamic> toJson() => {
+    'date':    date,
+    'fajr':    fajr,
+    'sunrise': sunrise,
+    'dhuhr':   dhuhr,
+    'asr':     asr,
+    'maghrib': maghrib,
+    'isha':    isha,
+  };
+
+  /// Restore from a locally-cached JSON map.
+  factory DailyPrayerTimes.fromCacheJson(Map<String, dynamic> json) {
+    return DailyPrayerTimes(
+      date:    json['date']    as String? ?? '',
+      fajr:    json['fajr']    as String? ?? '',
+      sunrise: json['sunrise'] as String? ?? '',
+      dhuhr:   json['dhuhr']   as String? ?? '',
+      asr:     json['asr']     as String? ?? '',
+      maghrib: json['maghrib'] as String? ?? '',
+      isha:    json['isha']    as String? ?? '',
+    );
+  }
+
   /// Strip timezone offset if present: "04:12 (+06)" → "04:12"
   static String _normalizeTime(dynamic raw) {
     final s = raw?.toString() ?? '';
@@ -85,16 +109,18 @@ class PrayerEntry {
     this.isInformational = false,
   });
 
-  /// Parse time to today's DateTime for countdown
-  DateTime? toDateTime() {
+  /// Parse time to a DateTime on the given calendar date.
+  DateTime? toDateTimeOn(DateTime date) {
     final parts = time.split(':');
     if (parts.length < 2) return null;
     final h = int.tryParse(parts[0]);
     final m = int.tryParse(parts[1]);
     if (h == null || m == null) return null;
-    final now = DateTime.now();
-    return DateTime(now.year, now.month, now.day, h, m);
+    return DateTime(date.year, date.month, date.day, h, m);
   }
+
+  /// Parse time to today's DateTime (convenience wrapper for countdown / UI).
+  DateTime? toDateTime() => toDateTimeOn(DateTime.now());
 }
 
 class HijriDate {

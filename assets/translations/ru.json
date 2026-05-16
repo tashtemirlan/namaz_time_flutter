@@ -68,7 +68,8 @@
     "talas": "Таласская обл.",
     "chuy": "Чуйская обл.",
     "issyk_kul": "Иссык-Кульская обл.",
-    "osh_city": "Ош (город)"
+    "osh_city": "Ош (город)",
+    "empty_search": "Ничего не найдено"
   },
 
   "settings": {
@@ -81,6 +82,7 @@
     "lang_en": "English",
     "notifications": "Уведомления",
     "notify_before": "Напомнить за {min} мин",
+    "notify_before_title": "Заблаговременное напоминание",
     "prayer_reminders": "Напоминания о намазе",
     "sound": "Звук уведомления",
     "sound_toggle": "Воспроизводить звук",

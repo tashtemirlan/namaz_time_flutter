@@ -21,7 +21,7 @@
     "title": "Намаз убактысы",
     "today": "Бүгүн",
     "next_prayer": "Кийинки намаз",
-    "in_time": "{time} өткөндөн кийин",
+    "in_time": "{time} кийин",
     "now": "Азыр",
     "passed": "Өттү",
     "no_location": "Жайгашуу орду белгиленген эмес",
@@ -68,7 +68,8 @@
     "talas": "Талас облусу",
     "chuy": "Чүй облусу",
     "issyk_kul": "Ысык-Көл облусу",
-    "osh_city": "Ош шаары"
+    "osh_city": "Ош шаары",
+    "empty_search": "Эч нерсе табылган жок"
   },
 
   "settings": {
@@ -81,6 +82,7 @@
     "lang_en": "English",
     "notifications": "Билдирүүлөр",
     "notify_before": "{min} мин мурун эскертүү",
+    "notify_before_title": "Алдын ала эскертүү",
     "prayer_reminders": "Намаз жөнүндө эскертүүлөр",
     "sound": "Билдирүү үнү",
     "sound_toggle": "Үн ойнотуу",

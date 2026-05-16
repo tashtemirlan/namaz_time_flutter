@@ -140,6 +140,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen>
     if (times != null) {
       await NotificationService.schedulePrayerNotifications(
           times, AppSettings.language);
+    } else {
+      await NotificationService.refreshScheduleForToday();
     }
 
     AppSnackBar.success(
@@ -190,7 +192,7 @@ class _KyrgyzstanTab extends StatelessWidget {
             ...region.cities.map((city) {
               final loc = AppLocation(
                 countryCode: 'KG',
-                countryName: 'Кыргызстан',
+                countryName: 'location.kyrgyzstan'.tr(),
                 cityName: city.name,
                 kgLocationCode: city.kgCode,
                 latitude: city.lat,
@@ -389,7 +391,7 @@ class _EmptySearch extends StatelessWidget {
           Text('🔍', style: const TextStyle(fontSize: 48)),
           const SizedBox(height: 12),
           AppText(
-            text: 'Ничего не найдено',
+            text: 'location.empty_search'.tr(),
             fontSize: 16,
             color: colors.textSecondary,
           ),

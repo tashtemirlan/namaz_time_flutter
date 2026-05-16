@@ -13,26 +13,30 @@ class PrayerTimesRepository {
 
   // ─── Muftiyat.kg (Kyrgyzstan) ────────────────────────────────────────────
 
-  /// Fetch today's prayer times from muftiyat.kg by location code.
+  /// Fetch prayer times from muftiyat.kg by location code.
+  /// [date] defaults to today if omitted.
   Future<DailyPrayerTimes> fetchKgByCode({
     required int locationCode,
     String lang = 'ru',
+    DateTime? date,
   }) async {
-    final today = _todayFormatted(); // "DD-MM-YYYY"
+    final dateStr = _formatMuftiyat(date ?? DateTime.now());
     final url =
-        'https://muftiyat.kg/$lang/api/v1/calendar/$locationCode/?start=$today&end=$today';
+        'https://muftiyat.kg/$lang/api/v1/calendar/$locationCode/?start=$dateStr&end=$dateStr';
     return _fetchMuftiyat(url);
   }
 
-  /// Fetch today's prayer times from muftiyat.kg by coordinates.
+  /// Fetch prayer times from muftiyat.kg by coordinates.
+  /// [date] defaults to today if omitted.
   Future<DailyPrayerTimes> fetchKgByCoords({
     required double lat,
     required double lng,
     String lang = 'ru',
+    DateTime? date,
   }) async {
-    final today = _todayFormatted();
+    final dateStr = _formatMuftiyat(date ?? DateTime.now());
     final url =
-        'https://muftiyat.kg/$lang/api/v1/calendar/?lat=${lat.toStringAsFixed(6)}&lng=${lng.toStringAsFixed(6)}&start=$today&end=$today';
+        'https://muftiyat.kg/$lang/api/v1/calendar/?lat=${lat.toStringAsFixed(6)}&lng=${lng.toStringAsFixed(6)}&start=$dateStr&end=$dateStr';
     return _fetchMuftiyat(url);
   }
 
@@ -63,16 +67,21 @@ class PrayerTimesRepository {
 
   // ─── AlAdhan (Worldwide) ─────────────────────────────────────────────────
 
-  /// Fetch today's prayer times from AlAdhan by coordinates.
-  /// method=2 → ISNA, method=3 → MWL, method=4 → Umm Al-Qura (Mecca)
+  /// Fetch prayer times from AlAdhan by coordinates.
+  /// method=2 → ISNA, method=3 → MWL, method=4 → Umm Al-Qura (Mecca).
+  /// [date] defaults to today if omitted.
   Future<DailyPrayerTimes> fetchAlAdhanByCoords({
     required double lat,
     required double lng,
     int method = 3,
+    DateTime? date,
   }) async {
     try {
-      final timestamp =
-          (DateTime.now().millisecondsSinceEpoch / 1000).round();
+      final target = date ?? DateTime.now();
+      // Use noon of the target day so the timestamp lands firmly within that
+      // calendar day regardless of the device's UTC offset.
+      final noon = DateTime(target.year, target.month, target.day, 12, 0);
+      final timestamp = (noon.millisecondsSinceEpoch / 1000).round();
       final url =
           'https://api.aladhan.com/v1/timings/$timestamp?latitude=$lat&longitude=$lng&method=$method';
       final response = await _dio.get(url);
@@ -81,7 +90,7 @@ class PrayerTimesRepository {
       final timings = dataMap['timings'] as Map<String, dynamic>;
       final dateMap = dataMap['date'] as Map<String, dynamic>?;
       final hijriMap = dateMap?['hijri'] as Map<String, dynamic>?;
-      final dateStr = dateMap?['gregorian']?['date']?.toString() ?? _todayIso();
+      final dateStr = dateMap?['gregorian']?['date']?.toString() ?? _formatIso(target);
 
       return DailyPrayerTimes.fromAlAdhan(
         timings, dateStr,
@@ -94,39 +103,41 @@ class PrayerTimesRepository {
 
   // ─── Dispatch (decides which API to call) ────────────────────────────────
 
-  Future<DailyPrayerTimes> fetchForLocation(AppLocation location) async {
+  /// Fetch prayer times for the given location.
+  /// [date] defaults to today if omitted — pass tomorrow's date to pre-fetch.
+  Future<DailyPrayerTimes> fetchForLocation(
+    AppLocation location, {
+    DateTime? date,
+  }) async {
     if (location.isKyrgyzstan) {
       if (location.kgLocationCode != null) {
-        return fetchKgByCode(locationCode: location.kgLocationCode!);
+        return fetchKgByCode(locationCode: location.kgLocationCode!, date: date);
       } else if (location.latitude != null && location.longitude != null) {
-        return fetchKgByCoords(lat: location.latitude!, lng: location.longitude!);
+        return fetchKgByCoords(
+            lat: location.latitude!, lng: location.longitude!, date: date);
       }
     }
     // Worldwide: use AlAdhan with coordinates
     if (location.latitude != null && location.longitude != null) {
       return fetchAlAdhanByCoords(
-          lat: location.latitude!, lng: location.longitude!);
+          lat: location.latitude!, lng: location.longitude!, date: date);
     }
     throw Exception('No coordinates or location code available');
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────
 
-  /// Format today as "DD-MM-YYYY" (muftiyat.kg format)
-  static String _todayFormatted() {
-    final now = DateTime.now();
-    final dd = now.day.toString().padLeft(2, '0');
-    final mm = now.month.toString().padLeft(2, '0');
-    final yyyy = now.year.toString();
-    return '$dd-$mm-$yyyy';
+  /// Format a date as "DD-MM-YYYY" (muftiyat.kg format).
+  static String _formatMuftiyat(DateTime date) {
+    final dd = date.day.toString().padLeft(2, '0');
+    final mm = date.month.toString().padLeft(2, '0');
+    return '$dd-$mm-${date.year}';
   }
 
-  /// Format today as "YYYY-MM-DD"
-  static String _todayIso() {
-    final now = DateTime.now();
-    final dd = now.day.toString().padLeft(2, '0');
-    final mm = now.month.toString().padLeft(2, '0');
-    final yyyy = now.year.toString();
-    return '$yyyy-$mm-$dd';
+  /// Format a date as "YYYY-MM-DD".
+  static String _formatIso(DateTime date) {
+    final dd = date.day.toString().padLeft(2, '0');
+    final mm = date.month.toString().padLeft(2, '0');
+    return '${date.year}-$mm-$dd';
   }
 }

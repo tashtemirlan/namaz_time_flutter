@@ -82,8 +82,7 @@ class SettingsScreen extends StatelessWidget {
 
                 // Notify before picker
                 _SectionHeader(
-                  title: 'settings.notify_before'
-                      .tr(namedArgs: {'min': ''}),
+                  title: 'settings.notify_before_title'.tr(),
                   colors: colors,
                 ),
                 _SettingCard(
@@ -196,9 +195,18 @@ class SettingsScreen extends StatelessWidget {
   Future<void> _reschedule(BuildContext context) async {
     final prayer = context.read<PrayerProvider>();
     final times = prayer.times;
-    if (times == null) return;
-    await NotificationService.schedulePrayerNotifications(
-        times, AppSettings.language);
+
+    if (times != null) {
+      // Fast path: provider already has today's times in memory.
+      await NotificationService.schedulePrayerNotifications(
+          times, AppSettings.language);
+    } else {
+      // Fallback: provider is empty (load failed / not started yet).
+      // refreshScheduleForToday will use the Hive cache if offline, so the
+      // updated toggle flags are always applied — old OS notifications won't
+      // keep firing for a disabled prayer.
+      await NotificationService.refreshScheduleForToday();
+    }
   }
 
   Widget _buildHeader(AppColors colors) {
