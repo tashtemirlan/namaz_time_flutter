@@ -14,11 +14,12 @@ class NotificationService {
   static bool _initialized = false;
   static Timer? _midnightTimer;
 
-  // Two channels: one with sound, one silent.
-  // Android 8+ ties sound to the channel — we create both upfront
+  // Channels: one with default azan, one with system sound, one silent.
+  // Android 8+ ties sound to the channel — we create them upfront
   // and pick the right one at schedule time.
-  static const _channelSound  = 'prayer_times_sound';
-  static const _channelSilent = 'prayer_times_silent';
+  static const _channelSound       = 'prayer_times_sound';
+  static const _channelSilent      = 'prayer_times_silent';
+  static const _channelDefaultAzan = 'prayer_times_azan';
 
   static Future<void> init() async {
     if (_initialized) return;
@@ -69,6 +70,17 @@ class NotificationService {
         enableVibration: true,
       ),
     );
+
+    await androidPlugin.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _channelDefaultAzan,
+        'Prayer Times (Azan)',
+        description: 'Reminders for each prayer time with default azan sound',
+        importance: Importance.high,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('azan'),
+      ),
+    );
   }
 
   static void _setLocalTimezone() {
@@ -91,27 +103,82 @@ class NotificationService {
     await android?.requestNotificationsPermission();
   }
 
+  /// Build [NotificationDetails] from current sound settings.
+  static NotificationDetails _buildNotifDetails({
+    required bool soundOn,
+    required String azanSoundMode,
+    required String? customSoundUri,
+    required String channelId,
+    required String channelName,
+  }) {
+    final AndroidNotificationSound? androidSound;
+    final String? iosSound;
+
+    if (!soundOn) {
+      androidSound = null;
+      iosSound = null;
+    } else if (azanSoundMode == AppSettings.azanSoundModeDefaultAzan) {
+      androidSound = const RawResourceAndroidNotificationSound('azan');
+      iosSound = 'azan.mp3';
+    } else if (azanSoundMode == AppSettings.azanSoundModeCustom &&
+        customSoundUri != null) {
+      androidSound = UriAndroidNotificationSound(customSoundUri);
+      iosSound = null;
+    } else {
+      androidSound = null;
+      iosSound = null;
+    }
+
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        channelId,
+        channelName,
+        channelDescription: 'Reminders for each prayer time',
+        importance: Importance.high,
+        priority: Priority.high,
+        icon: '@drawable/ic_stat_namaztime',
+        playSound: soundOn,
+        sound: androidSound,
+      ),
+      iOS: DarwinNotificationDetails(
+        presentSound: soundOn,
+        sound: iosSound,
+      ),
+    );
+  }
+
   /// Schedule notifications for all enabled prayers today.
   static Future<void> schedulePrayerNotifications(
     DailyPrayerTimes times,
     String langCode,
   ) async {
     await cancelAll();
-    final beforeMin  = AppSettings.notifyBeforeMinutes;
-    final soundOn    = AppSettings.soundEnabled;
+    final beforeMin     = AppSettings.notifyBeforeMinutes;
+    final soundOn       = AppSettings.soundEnabled;
+    final azanSoundMode = AppSettings.azanSoundMode;
     final customSoundUri = AppSettings.customSoundUri;
-    final now        = DateTime.now();
+    final now           = DateTime.now();
 
     final channelId = _resolveChannelId(
       soundOn: soundOn,
+      azanSoundMode: azanSoundMode,
       customSoundUri: customSoundUri,
     );
-    final channelName = soundOn ? 'Prayer Times' : 'Prayer Times (Silent)';
+    final channelName = _resolveChannelName(soundOn, azanSoundMode);
     await _ensureDynamicChannel(
       channelId: channelId,
       channelName: channelName,
       soundOn: soundOn,
+      azanSoundMode: azanSoundMode,
       customSoundUri: customSoundUri,
+    );
+
+    final details = _buildNotifDetails(
+      soundOn: soundOn,
+      azanSoundMode: azanSoundMode,
+      customSoundUri: customSoundUri,
+      channelId: channelId,
+      channelName: channelName,
     );
 
     final prayers = times.prayers;
@@ -131,23 +198,7 @@ class NotificationService {
             title: _prayerTitle(prayer.key, langCode),
             body: _prayerBody(prayer.key, prayer.time, beforeMin, langCode),
             scheduledDate: tz.TZDateTime.from(notifTime, tz.local),
-            notificationDetails: NotificationDetails(
-              android: AndroidNotificationDetails(
-                channelId,
-                channelName,
-                channelDescription: 'Reminders for each prayer time',
-                importance: Importance.high,
-                priority: Priority.high,
-                icon: '@drawable/ic_stat_namaztime',
-                playSound: soundOn,
-                sound: soundOn && customSoundUri != null
-                    ? UriAndroidNotificationSound(customSoundUri)
-                    : null,
-              ),
-              iOS: DarwinNotificationDetails(
-                presentSound: soundOn,
-              ),
-            ),
+            notificationDetails: details,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           );
         }
@@ -160,23 +211,7 @@ class NotificationService {
           title: _prayerTitle(prayer.key, langCode),
           body: _azanNowBody(prayer.key, prayer.time, langCode),
           scheduledDate: tz.TZDateTime.from(dt, tz.local),
-          notificationDetails: NotificationDetails(
-            android: AndroidNotificationDetails(
-              channelId,
-              channelName,
-              channelDescription: 'Reminders for each prayer time',
-              importance: Importance.high,
-              priority: Priority.high,
-              icon: '@drawable/ic_stat_namaztime',
-              playSound: soundOn,
-              sound: soundOn && customSoundUri != null
-                  ? UriAndroidNotificationSound(customSoundUri)
-                  : null,
-            ),
-            iOS: DarwinNotificationDetails(
-              presentSound: soundOn,
-            ),
-          ),
+          notificationDetails: details,
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         );
       }
@@ -216,26 +251,56 @@ class NotificationService {
     await schedulePrayerNotifications(times, AppSettings.language);
   }
 
+  static String _resolveChannelName(bool soundOn, String azanSoundMode) {
+    if (!soundOn) return 'Prayer Times (Silent)';
+    if (azanSoundMode == AppSettings.azanSoundModeDefaultAzan) {
+      return 'Prayer Times (Azan)';
+    }
+    return 'Prayer Times';
+  }
+
   static String _resolveChannelId({
     required bool soundOn,
+    required String azanSoundMode,
     required String? customSoundUri,
   }) {
     if (!soundOn) return _channelSilent;
-    if (customSoundUri == null || customSoundUri.isEmpty) return _channelSound;
-    final hash = base64Url.encode(utf8.encode(customSoundUri)).replaceAll('=', '');
-    return 'prayer_times_sound_$hash';
+    if (azanSoundMode == AppSettings.azanSoundModeDefaultAzan) {
+      return _channelDefaultAzan;
+    }
+    if (azanSoundMode == AppSettings.azanSoundModeCustom &&
+        customSoundUri != null &&
+        customSoundUri.isNotEmpty) {
+      final hash =
+          base64Url.encode(utf8.encode(customSoundUri)).replaceAll('=', '');
+      return 'prayer_times_sound_$hash';
+    }
+    return _channelSound;
   }
 
   static Future<void> _ensureDynamicChannel({
     required String channelId,
     required String channelName,
     required bool soundOn,
+    required String azanSoundMode,
     required String? customSoundUri,
   }) async {
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
     if (androidPlugin == null) return;
+
+    final AndroidNotificationSound? sound;
+    if (!soundOn) {
+      sound = null;
+    } else if (azanSoundMode == AppSettings.azanSoundModeDefaultAzan) {
+      sound = const RawResourceAndroidNotificationSound('azan');
+    } else if (azanSoundMode == AppSettings.azanSoundModeCustom &&
+        customSoundUri != null) {
+      sound = UriAndroidNotificationSound(customSoundUri);
+    } else {
+      sound = null;
+    }
 
     await androidPlugin.createNotificationChannel(
       AndroidNotificationChannel(
@@ -244,9 +309,7 @@ class NotificationService {
         description: 'Reminders for each prayer time',
         importance: Importance.high,
         playSound: soundOn,
-        sound: soundOn && customSoundUri != null
-            ? UriAndroidNotificationSound(customSoundUri)
-            : null,
+        sound: sound,
         enableVibration: true,
       ),
     );
@@ -258,17 +321,20 @@ class NotificationService {
 
   /// Show an immediate test notification using current sound settings.
   static Future<void> showTestNotification(String langCode) async {
-    final soundOn = AppSettings.soundEnabled;
+    final soundOn       = AppSettings.soundEnabled;
+    final azanSoundMode = AppSettings.azanSoundMode;
     final customSoundUri = AppSettings.customSoundUri;
     final channelId = _resolveChannelId(
       soundOn: soundOn,
+      azanSoundMode: azanSoundMode,
       customSoundUri: customSoundUri,
     );
-    final channelName = soundOn ? 'Prayer Times' : 'Prayer Times (Silent)';
+    final channelName = _resolveChannelName(soundOn, azanSoundMode);
     await _ensureDynamicChannel(
       channelId: channelId,
       channelName: channelName,
       soundOn: soundOn,
+      azanSoundMode: azanSoundMode,
       customSoundUri: customSoundUri,
     );
 
@@ -276,22 +342,12 @@ class NotificationService {
       id: 900001,
       title: _testTitle(langCode),
       body: _testBody(langCode),
-      notificationDetails: NotificationDetails(
-        android: AndroidNotificationDetails(
-          channelId,
-          channelName,
-          channelDescription: 'Test reminder notification',
-          importance: Importance.high,
-          priority: Priority.high,
-          icon: '@drawable/ic_stat_namaztime',
-          playSound: soundOn,
-          sound: soundOn && customSoundUri != null
-              ? UriAndroidNotificationSound(customSoundUri)
-              : null,
-        ),
-        iOS: DarwinNotificationDetails(
-          presentSound: soundOn,
-        ),
+      notificationDetails: _buildNotifDetails(
+        soundOn: soundOn,
+        azanSoundMode: azanSoundMode,
+        customSoundUri: customSoundUri,
+        channelId: channelId,
+        channelName: channelName,
       ),
     );
   }

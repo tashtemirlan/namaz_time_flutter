@@ -7,11 +7,13 @@ class SettingsProvider extends ChangeNotifier {
   final Map<String, bool> _notifEnabled = {};
   int _notifBeforeMin = 10;
   bool _soundEnabled = true;
+  String _azanSoundMode = AppSettings.azanSoundModeSystem;
   String? _customSoundUri;
 
   Map<String, bool> get notifEnabled => Map.unmodifiable(_notifEnabled);
   int get notifBeforeMin => _notifBeforeMin;
   bool get soundEnabled => _soundEnabled;
+  String get azanSoundMode => _azanSoundMode;
   String? get customSoundUri => _customSoundUri;
 
   SettingsProvider() {
@@ -19,9 +21,10 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   void _load() {
-    _notifBeforeMin = AppSettings.notifyBeforeMinutes;
-    _soundEnabled = AppSettings.soundEnabled;
-    _customSoundUri = AppSettings.customSoundUri;
+    _notifBeforeMin  = AppSettings.notifyBeforeMinutes;
+    _soundEnabled    = AppSettings.soundEnabled;
+    _azanSoundMode   = AppSettings.azanSoundMode;
+    _customSoundUri  = AppSettings.customSoundUri;
     for (final p in _prayers) {
       _notifEnabled[p] = AppSettings.isPrayerNotifEnabled(p);
     }
@@ -42,6 +45,12 @@ class SettingsProvider extends ChangeNotifier {
   Future<void> setSoundEnabled(bool enabled) async {
     _soundEnabled = enabled;
     await AppSettings.setSoundEnabled(enabled);
+    notifyListeners();
+  }
+
+  Future<void> setAzanSoundMode(String mode) async {
+    _azanSoundMode = mode;
+    await AppSettings.setAzanSoundMode(mode);
     notifyListeners();
   }
 
