@@ -68,7 +68,8 @@
     "talas": "Talas Region",
     "chuy": "Chuy Region",
     "issyk_kul": "Issyk-Kul Region",
-    "osh_city": "Osh (city)"
+    "osh_city": "Osh (city)",
+    "empty_search": "Nothing found"
   },
 
   "settings": {
@@ -81,6 +82,7 @@
     "lang_en": "English",
     "notifications": "Notifications",
     "notify_before": "Remind {min} min before",
+    "notify_before_title": "Advance reminder",
     "prayer_reminders": "Prayer reminders",
     "sound": "Notification sound",
     "sound_toggle": "Play sound",

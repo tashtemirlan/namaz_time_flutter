@@ -326,13 +326,6 @@ class _CompassView extends StatelessWidget {
           isAligned: isAligned,
           colors: colors,
         ),
-        const SizedBox(height: 14),
-        AppText(
-          text: 'qibla.calibrate'.tr(),
-          fontSize: 12,
-          color: colors.textTertiary,
-          textAlign: TextAlign.center,
-        ),
         const Spacer(),
         const SizedBox(height: 32),
       ],

@@ -127,4 +127,28 @@ class AppSettings {
 
   static Future<void> setLastBgRefreshDate(String value) =>
       _box.put(_lastBgRefreshDateKey, value);
+
+  // ─── Prayer times cache (offline fallback) ────────────────────────────────
+  static const _cachedTimesKey     = 'cached_prayer_times';
+  static const _cachedTimesDateKey = 'cached_prayer_times_date';
+
+  /// The last successfully fetched prayer times, stored as a plain Map.
+  static Map<String, dynamic>? get cachedPrayerTimesJson {
+    final raw = _box.get(_cachedTimesKey);
+    if (raw == null) return null;
+    return Map<String, dynamic>.from(raw as Map);
+  }
+
+  /// The date string that belongs to [cachedPrayerTimesJson].
+  static String? get cachedPrayerTimesDate =>
+      (_box.get(_cachedTimesDateKey) as String?)?.trim();
+
+  /// Persist [json] as the latest known-good prayer times.
+  static Future<void> cachePrayerTimesJson(
+    Map<String, dynamic> json,
+    String date,
+  ) async {
+    await _box.put(_cachedTimesKey, json);
+    await _box.put(_cachedTimesDateKey, date);
+  }
 }
