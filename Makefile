@@ -84,6 +84,45 @@ generate-locales:
 	  fi; \
 	done
 
+translations-diff:
+	@echo "🔍 Checking translation key parity (ru is the base)..."
+	@python3 - <<'EOF'
+import json
+
+def flatten(d, prefix=''):
+    keys = set()
+    for k, v in d.items():
+        full = f"{prefix}.{k}" if prefix else k
+        if isinstance(v, dict):
+            keys |= flatten(v, full)
+        else:
+            keys.add(full)
+    return keys
+
+files = {
+    'ru': 'assets/translations/ru.json',
+    'ky': 'assets/translations/ky.json',
+    'en': 'assets/translations/en.json',
+}
+
+data = {lang: flatten(json.load(open(path))) for lang, path in files.items()}
+base = data['ru']
+ok = True
+for lang in ['ky', 'en']:
+    missing = base - data[lang]
+    extra   = data[lang] - base
+    if missing:
+        ok = False
+        print(f"\n  ⚠️  {lang} missing {len(missing)} key(s):")
+        for k in sorted(missing): print(f"    - {k}")
+    if extra:
+        print(f"\n  ℹ️  {lang} has {len(extra)} extra key(s):")
+        for k in sorted(extra): print(f"    + {k}")
+    if not missing and not extra:
+        print(f"  ✓  {lang} is in sync with ru")
+import sys; sys.exit(0 if ok else 1)
+EOF
+
 # ─── Code Quality ─────────────────────────────────────────────────────────────
 
 analyze: setup
@@ -160,6 +199,16 @@ clean-hive:
 	  echo "✅ App data cleared" || \
 	  echo "❌ No Android emulator/device found — reinstall the app manually on iOS"
 
+# ─── Knowledge Graph ──────────────────────────────────────────────────────────
+
+graphify:
+	@echo "🧠 Rebuilding knowledge graph..."
+	@graphify update .
+	@echo "✅ Graph updated — see graphify-out/GRAPH_REPORT.md"
+
+graphify-report:
+	@cat graphify-out/GRAPH_REPORT.md | head -80
+
 # ─── Help ─────────────────────────────────────────────────────────────────────
 
 help:
@@ -190,6 +239,11 @@ help:
 	@echo "  Assets & Generation:"
 	@echo "    make generate-icons       Regenerate launcher icons (assets/icon.png)"
 	@echo "    make generate-locales     Validate ru / ky / en translation JSON files"
+	@echo "    make translations-diff    Check key parity across all locale files"
+	@echo ""
+	@echo "  Knowledge Graph:"
+	@echo "    make graphify             Rebuild the codebase knowledge graph"
+	@echo "    make graphify-report      Print top of GRAPH_REPORT.md"
 	@echo ""
 	@echo "  Code Quality:"
 	@echo "    make analyze              Run flutter analyze"

@@ -629,16 +629,18 @@ class _PrayerCardState extends State<_PrayerCard>
   late Animation<double> _activeAnim;
 
   static const _icons = {
-    'fajr': Icons.wb_twilight_rounded,
-    'dhuhr': Icons.wb_sunny_rounded,
-    'asr': Icons.sunny_snowing,
+    'fajr':    Icons.wb_twilight_rounded,
+    'sunrise': Icons.wb_sunny_outlined,
+    'dhuhr':   Icons.wb_sunny_rounded,
+    'asr':     Icons.sunny_snowing,
     'maghrib': Icons.wb_twilight_rounded,
-    'isha': Icons.nights_stay_rounded,
+    'isha':    Icons.nights_stay_rounded,
   };
 
   // Gradient pairs per prayer
   static const _gradients = {
     'fajr':    [Color(0xFF6B9EAA), Color(0xFF3D7089)],
+    'sunrise': [Color(0xFFE8A825), Color(0xFFF5C842)],
     'dhuhr':   [Color(0xFFC8952A), Color(0xFFE5A935)],
     'asr':     [Color(0xFF7A9E5E), Color(0xFF5A8040)],
     'maghrib': [Color(0xFFB05A3A), Color(0xFFD4724A)],
