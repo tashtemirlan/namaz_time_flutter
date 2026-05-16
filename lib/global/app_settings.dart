@@ -86,12 +86,25 @@ class AppSettings {
   static const _soundEnabledKey = 'sound_enabled';
   static const _soundUriKey = 'sound_uri';
   static const _lastBgRefreshDateKey = 'bg_last_refresh_date';
+  static const _azanSoundModeKey = 'azan_sound_mode';
+
+  /// Possible values: 'system' | 'default_azan' | 'custom'
+  static const String azanSoundModeSystem = 'system';
+  static const String azanSoundModeDefaultAzan = 'default_azan';
+  static const String azanSoundModeCustom = 'custom';
 
   static bool get soundEnabled =>
       _box.get(_soundEnabledKey, defaultValue: true) as bool;
 
   static Future<void> setSoundEnabled(bool enabled) =>
       _box.put(_soundEnabledKey, enabled);
+
+  /// Which azan sound mode is active: 'system', 'default_azan', or 'custom'.
+  static String get azanSoundMode =>
+      _box.get(_azanSoundModeKey, defaultValue: azanSoundModeSystem) as String;
+
+  static Future<void> setAzanSoundMode(String mode) =>
+      _box.put(_azanSoundModeKey, mode);
 
   static String? get customSoundUri =>
       (() {

@@ -120,39 +120,31 @@ class SettingsScreen extends StatelessWidget {
                         await _reschedule(context);
                       },
                       colors: colors,
+                      showDivider: true,
                     ),
-                    _ActionTile(
-                      icon: Icons.music_note_rounded,
-                      title: 'settings.azan_ringtone'.tr(),
-                      subtitle: settings.customSoundUri == null
-                          ? 'settings.azan_ringtone_default'.tr()
-                          : _displayNameFromUri(settings.customSoundUri!),
-                      onTap: () async {
-                        final result = await FilePicker.platform.pickFiles(
-                          type: FileType.audio,
-                        );
-                        final path = result?.files.single.path;
-                        if (path == null) return;
-                        final uri = 'file://$path';
-                        await settings.setCustomSoundUri(uri);
+                    _AzanSoundModePicker(
+                      currentMode: settings.azanSoundMode,
+                      customSoundUri: settings.customSoundUri,
+                      enabled: settings.soundEnabled,
+                      colors: colors,
+                      onModeSelected: (mode) async {
+                        if (mode == AppSettings.azanSoundModeCustom) {
+                          final result = await FilePicker.platform.pickFiles(
+                            type: FileType.audio,
+                          );
+                          final path = result?.files.single.path;
+                          if (path == null) return;
+                          await settings.setCustomSoundUri('file://$path');
+                          await settings.setAzanSoundMode(
+                              AppSettings.azanSoundModeCustom);
+                        } else {
+                          await settings.setAzanSoundMode(mode);
+                        }
                         if (!context.mounted) return;
                         await _reschedule(context);
                       },
-                      colors: colors,
-                      showDivider: settings.customSoundUri != null,
+                      displayNameFromUri: _displayNameFromUri,
                     ),
-                    if (settings.customSoundUri != null)
-                      _ActionTile(
-                        icon: Icons.restart_alt_rounded,
-                        title: 'settings.reset_azan_ringtone'.tr(),
-                        subtitle: 'settings.azan_ringtone_default'.tr(),
-                        onTap: () async {
-                          await settings.setCustomSoundUri(null);
-                          if (!context.mounted) return;
-                          await _reschedule(context);
-                        },
-                        colors: colors,
-                      ),
                     _ActionTile(
                       icon: Icons.notifications_active_rounded,
                       title: 'settings.test_notification'.tr(),
@@ -234,6 +226,148 @@ class SettingsScreen extends StatelessWidget {
       case 'isha':    return Icons.nights_stay_rounded;
       default:        return Icons.access_time_rounded;
     }
+  }
+}
+
+// ─── Azan Sound Mode Picker ───────────────────────────────────────────────
+
+class _AzanSoundModePicker extends StatelessWidget {
+  final String currentMode;
+  final String? customSoundUri;
+  final bool enabled;
+  final AppColors colors;
+  final Future<void> Function(String mode) onModeSelected;
+  final String Function(String uri) displayNameFromUri;
+
+  const _AzanSoundModePicker({
+    required this.currentMode,
+    required this.customSoundUri,
+    required this.enabled,
+    required this.colors,
+    required this.onModeSelected,
+    required this.displayNameFromUri,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final options = [
+      (
+        mode: AppSettings.azanSoundModeSystem,
+        icon: Icons.notifications_rounded,
+        label: 'settings.sound_system'.tr(),
+        subtitle: 'settings.sound_system_hint'.tr(),
+      ),
+      (
+        mode: AppSettings.azanSoundModeDefaultAzan,
+        icon: Icons.surround_sound_rounded,
+        label: 'settings.sound_default_azan'.tr(),
+        subtitle: 'settings.sound_default_azan_hint'.tr(),
+      ),
+      (
+        mode: AppSettings.azanSoundModeCustom,
+        icon: Icons.audio_file_rounded,
+        label: 'settings.azan_ringtone'.tr(),
+        subtitle: currentMode == AppSettings.azanSoundModeCustom &&
+                customSoundUri != null
+            ? displayNameFromUri(customSoundUri!)
+            : 'settings.azan_ringtone_pick'.tr(),
+      ),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: AppText(
+              text: 'settings.azan_ringtone'.tr(),
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: enabled ? colors.textSecondary : colors.textTertiary,
+            ),
+          ),
+          ...options.asMap().entries.map((e) {
+            final opt = e.value;
+            final isSelected = currentMode == opt.mode;
+            final isLast = e.key == options.length - 1;
+            return Column(
+              children: [
+                InkWell(
+                  onTap: enabled ? () => onModeSelected(opt.mode) : null,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 4),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: isSelected && enabled
+                                ? colors.primaryFill
+                                : colors.background,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(
+                            opt.icon,
+                            size: 18,
+                            color: isSelected && enabled
+                                ? colors.primary
+                                : colors.textTertiary,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppText(
+                                text: opt.label,
+                                fontSize: 14,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
+                                color: enabled
+                                    ? colors.text
+                                    : colors.textTertiary,
+                              ),
+                              AppText(
+                                text: opt.subtitle,
+                                fontSize: 11,
+                                color: colors.textTertiary,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          isSelected
+                              ? Icons.radio_button_checked_rounded
+                              : Icons.radio_button_unchecked_rounded,
+                          size: 20,
+                          color: isSelected && enabled
+                              ? colors.primary
+                              : colors.textTertiary,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (!isLast)
+                  Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    color: colors.divider,
+                    indent: 52,
+                  ),
+              ],
+            );
+          }),
+        ],
+      ),
+    );
   }
 }
 
