@@ -20,9 +20,10 @@ class DailyPrayerTimes {
     this.hijri,
   });
 
-  /// Ordered list for UI display (excluding sunrise)
+  /// Ordered list for UI display (sunrise included as an informational row)
   List<PrayerEntry> get prayers => [
     PrayerEntry(key: 'fajr',    time: fajr),
+    PrayerEntry(key: 'sunrise', time: sunrise, isInformational: true),
     PrayerEntry(key: 'dhuhr',   time: dhuhr),
     PrayerEntry(key: 'asr',     time: asr),
     PrayerEntry(key: 'maghrib', time: maghrib),
@@ -74,10 +75,15 @@ class DailyPrayerTimes {
 }
 
 class PrayerEntry {
-  final String key;   // 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
-  final String time;  // "HH:mm"
+  final String key;            // 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
+  final String time;           // "HH:mm"
+  final bool isInformational;  // true for sunrise — not a salat, shown as a time marker
 
-  const PrayerEntry({required this.key, required this.time});
+  const PrayerEntry({
+    required this.key,
+    required this.time,
+    this.isInformational = false,
+  });
 
   /// Parse time to today's DateTime for countdown
   DateTime? toDateTime() {

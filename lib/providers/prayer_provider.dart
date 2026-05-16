@@ -59,6 +59,7 @@ class PrayerProvider extends ChangeNotifier {
     Duration shortest = const Duration(days: 1);
 
     for (final p in _times!.prayers) {
+      if (p.isInformational) continue; // sunrise is not a salat — skip in countdown
       final dt = p.toDateTime();
       if (dt == null) continue;
       if (dt.isAfter(now)) {
