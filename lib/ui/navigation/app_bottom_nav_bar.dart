@@ -18,6 +18,7 @@ class AppBottomNavBar extends StatefulWidget {
 class _AppBottomNavBarState extends State<AppBottomNavBar>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
+  TabController? _tabCtrl;
 
   // IndexedStack — all screens mount once, never rebuilt on tab switch
   static const _screens = [
@@ -28,22 +29,48 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
   ];
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newCtrl = DefaultTabController.of(context);
+    if (newCtrl != _tabCtrl) {
+      _tabCtrl?.removeListener(_onTabChanged);
+      _tabCtrl = newCtrl;
+      _tabCtrl!.addListener(_onTabChanged);
+    }
+  }
+
+  void _onTabChanged() {
+    final idx = _tabCtrl?.index;
+    if (idx != null && idx != _currentIndex && mounted) {
+      setState(() => _currentIndex = idx);
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabCtrl?.removeListener(_onTabChanged);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
 
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        backgroundColor: colors.background,
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _screens,
-        ),
-        bottomNavigationBar: _NavBar(
-          currentIndex: _currentIndex,
-          colors: colors,
-          onTap: (i) => setState(() => _currentIndex = i),
-        ),
+    return Scaffold(
+      backgroundColor: colors.background,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
+      ),
+      bottomNavigationBar: _NavBar(
+        currentIndex: _currentIndex,
+        colors: colors,
+        onTap: (i) {
+          // Keep the DefaultTabController in sync so HomeScreen can navigate
+          // back here via DefaultTabController.of(context).animateTo(i).
+          _tabCtrl?.animateTo(i);
+          setState(() => _currentIndex = i);
+        },
       ),
     );
   }

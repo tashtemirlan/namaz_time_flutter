@@ -67,7 +67,10 @@ class NamazTimeApp extends StatelessWidget {
             locale:              context.locale,
             supportedLocales:    context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
-            home: const AppBottomNavBar(),
+            home: const DefaultTabController(
+              length: 4,
+              child: AppBottomNavBar(),
+            ),
           );
         },
       ),

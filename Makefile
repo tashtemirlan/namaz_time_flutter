@@ -84,15 +84,13 @@ generate-locales:
 	  fi; \
 	done
 
-translations-diff:
-	@echo "🔍 Checking translation key parity (ru is the base)..."
-	@python3 - <<'EOF'
-import json
+define TRANSLATIONS_DIFF_PY
+import json, sys
 
 def flatten(d, prefix=''):
     keys = set()
     for k, v in d.items():
-        full = f"{prefix}.{k}" if prefix else k
+        full = (prefix + '.' + k) if prefix else k
         if isinstance(v, dict):
             keys |= flatten(v, full)
         else:
@@ -104,7 +102,6 @@ files = {
     'ky': 'assets/translations/ky.json',
     'en': 'assets/translations/en.json',
 }
-
 data = {lang: flatten(json.load(open(path))) for lang, path in files.items()}
 base = data['ru']
 ok = True
@@ -113,15 +110,21 @@ for lang in ['ky', 'en']:
     extra   = data[lang] - base
     if missing:
         ok = False
-        print(f"\n  ⚠️  {lang} missing {len(missing)} key(s):")
-        for k in sorted(missing): print(f"    - {k}")
+        print("  warning: " + lang + " missing " + str(len(missing)) + " key(s):")
+        for k in sorted(missing): print("    - " + k)
     if extra:
-        print(f"\n  ℹ️  {lang} has {len(extra)} extra key(s):")
-        for k in sorted(extra): print(f"    + {k}")
+        print("  info: " + lang + " has " + str(len(extra)) + " extra key(s):")
+        for k in sorted(extra): print("    + " + k)
     if not missing and not extra:
-        print(f"  ✓  {lang} is in sync with ru")
-import sys; sys.exit(0 if ok else 1)
-EOF
+        print("  ok: " + lang + " is in sync with ru")
+sys.exit(0 if ok else 1)
+endef
+export TRANSLATIONS_DIFF_PY
+
+translations-diff:
+	@echo "🔍 Checking translation key parity (ru is the base)..."
+	@printf '%s\n' "$$TRANSLATIONS_DIFF_PY" | python3
+	@echo "✅ Key parity check complete"
 
 # ─── Code Quality ─────────────────────────────────────────────────────────────
 

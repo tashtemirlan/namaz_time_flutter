@@ -237,7 +237,7 @@ class NotificationService {
                 : _prayerBody(prayer.key, prayer.time, beforeMin, langCode),
             scheduledDate: tz.TZDateTime.from(notifTime, tz.local),
             notificationDetails: details,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            androidScheduleMode: AndroidScheduleMode.alarmClock,
           );
         }
       }
@@ -252,7 +252,7 @@ class NotificationService {
               : _azanNowBody(prayer.key, prayer.time, langCode),
           scheduledDate: tz.TZDateTime.from(dt, tz.local),
           notificationDetails: details,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          androidScheduleMode: AndroidScheduleMode.alarmClock,
         );
       }
     }
@@ -353,11 +353,13 @@ class NotificationService {
       android: AndroidNotificationDetails(
         channelId, channelName,
         channelDescription: 'Reminders for each prayer time',
-        importance: Importance.high,
-        priority: Priority.high,
+        importance: Importance.max,
+        priority: Priority.max,
+        category: AndroidNotificationCategory.alarm,
         icon: '@drawable/ic_stat_namaztime',
         playSound: soundOn,
         sound: androidSound,
+        enableVibration: true,
       ),
       iOS: DarwinNotificationDetails(presentSound: soundOn, sound: iosSound),
     );
@@ -423,7 +425,7 @@ class NotificationService {
   static String _prayerTitle(String key, String lang) {
     const names = {
       'ru': {'fajr': 'Фаджр', 'dhuhr': 'Зухр', 'asr': 'Аср', 'maghrib': 'Магриб', 'isha': 'Иша'},
-      'ky': {'fajr': 'Бамдат', 'dhuhr': 'Бешим', 'asr': 'Асыр', 'maghrib': 'Шам', 'isha': 'Куптан'},
+      'ky': {'fajr': 'Багымдат', 'dhuhr': 'Бешим', 'asr': 'Аср', 'maghrib': 'Шам', 'isha': 'Куптан'},
       'en': {'fajr': 'Fajr', 'dhuhr': 'Dhuhr', 'asr': 'Asr', 'maghrib': 'Maghrib', 'isha': 'Isha'},
     };
     return names[lang]?[key] ?? key;
