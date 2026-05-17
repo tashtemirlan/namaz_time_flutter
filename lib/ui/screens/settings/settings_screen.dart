@@ -8,6 +8,7 @@ import '../../../services/notification_service.dart';
 import '../../../global/app_settings.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_extensions.dart';
+import '../../widgets/app/app_snack_bar.dart';
 import '../../widgets/app/app_text.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -149,9 +150,23 @@ class SettingsScreen extends StatelessWidget {
                       title: 'settings.test_notification'.tr(),
                       subtitle: 'settings.test_notification_hint'.tr(),
                       onTap: () async {
-                        await NotificationService.showTestNotification(
+                        final ok = await NotificationService.showTestNotification(
                           AppSettings.language,
                         );
+                        if (!context.mounted) return;
+                        if (ok) {
+                          AppSnackBar.success(
+                            context,
+                            title: 'notifications.test_sent_title'.tr(),
+                            message: 'notifications.test_sent_message'.tr(),
+                          );
+                        } else {
+                          AppSnackBar.error(
+                            context,
+                            title: 'notifications.test_failed_title'.tr(),
+                            message: 'notifications.test_failed_message'.tr(),
+                          );
+                        }
                       },
                       colors: colors,
                     ),
@@ -684,7 +699,6 @@ class _ActionTile extends StatelessWidget {
   final String? subtitle;
   final Future<void> Function() onTap;
   final AppColors colors;
-  final bool showDivider;
 
   const _ActionTile({
     required this.icon,
@@ -692,7 +706,6 @@ class _ActionTile extends StatelessWidget {
     required this.onTap,
     required this.colors,
     this.subtitle,
-    this.showDivider = false,
   });
 
   @override
@@ -742,13 +755,6 @@ class _ActionTile extends StatelessWidget {
             ),
           ),
         ),
-        if (showDivider)
-          Divider(
-            height: 1,
-            thickness: 0.5,
-            color: colors.divider,
-            indent: 66,
-          ),
       ],
     );
   }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Prevents the Android resource shrinker from stripping assets that are only
+    referenced at runtime via string lookups (getIdentifier / RawResource).
+    Flutter enables shrinkResources implicitly for release builds, so any
+    resource not statically referenced in XML or Kotlin/Java is a candidate
+    for removal — this file explicitly opts them out.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_stat_namaztime,@raw/azan" />

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,9 +16,12 @@ class NotificationService {
   static Timer? _midnightTimer;
 
   // Channels
+  // NOTE: _channelDefaultAzan is versioned because Android locks channel sound
+  // settings after first creation — changing the ID forces a fresh channel with
+  // the correct azan sound.
   static const _channelSound       = 'prayer_times_sound';
   static const _channelSilent      = 'prayer_times_silent';
-  static const _channelDefaultAzan = 'prayer_times_azan';
+  static const _channelDefaultAzan = 'prayer_times_azan_v3';
 
   // Notification ID layout:
   //   Today    pre-azan reminders : 0–5
@@ -36,7 +40,13 @@ class NotificationService {
     tz_data.initializeTimeZones();
     _setLocalTimezone();
 
-    const android = AndroidInitializationSettings('@drawable/ic_stat_namaztime');
+    // flutter_local_notifications validates the init icon via getIdentifier() at
+    // startup — it checks "mipmap" first, then "drawable". @mipmap/ic_launcher
+    // is guaranteed to exist in every Flutter APK and never throws invalid_icon.
+    // The per-notification icon (@drawable/ic_stat_namaztime) is set separately
+    // in AndroidNotificationDetails and is resolved lazily when the notification
+    // fires, so it works correctly from the density-specific PNG files.
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -99,10 +109,17 @@ class NotificationService {
     }
   }
 
-  static Future<void> requestPermission() async {
+  static Future<bool> requestPermission() async {
+    await init();
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
-    await android?.requestNotificationsPermission();
+    try {
+      final granted = await android?.requestNotificationsPermission();
+      if (granted != null) return granted;
+    } catch (e) {
+      debugPrint('NotificationService: request permission failed — $e');
+    }
+    return true;
   }
 
   // ─── Public scheduling API ───────────────────────────────────────────────
@@ -204,16 +221,18 @@ class NotificationService {
     final azanSoundMode  = AppSettings.azanSoundMode;
     final customSoundUri = AppSettings.customSoundUri;
 
-    final channelId   = _resolveChannelId(
+    final wantedChannelId   = _resolveChannelId(
         soundOn: soundOn, azanSoundMode: azanSoundMode, customSoundUri: customSoundUri);
-    final channelName = _resolveChannelName(soundOn, azanSoundMode);
-    await _ensureDynamicChannel(
-        channelId: channelId, channelName: channelName,
+    final wantedChannelName = _resolveChannelName(soundOn, azanSoundMode);
+    final actualChannelId   = await _ensureDynamicChannel(
+        channelId: wantedChannelId, channelName: wantedChannelName,
         soundOn: soundOn, azanSoundMode: azanSoundMode, customSoundUri: customSoundUri);
+    final effectiveAzanMode = actualChannelId == wantedChannelId ? azanSoundMode : '';
+    final actualChannelName = _resolveChannelName(soundOn, effectiveAzanMode);
 
     final details = _buildNotifDetails(
-        soundOn: soundOn, azanSoundMode: azanSoundMode,
-        customSoundUri: customSoundUri, channelId: channelId, channelName: channelName);
+        soundOn: soundOn, azanSoundMode: effectiveAzanMode,
+        customSoundUri: customSoundUri, channelId: actualChannelId, channelName: actualChannelName);
 
     final dateLabel = stale ? _formatDateForNotif(staleDate ?? times.date, langCode) : null;
     final prayers   = times.prayers;
@@ -239,7 +258,7 @@ class NotificationService {
                 : _prayerBody(prayer.key, prayer.time, beforeMin, langCode),
             scheduledDate: tz.TZDateTime.from(notifTime, tz.local),
             notificationDetails: details,
-            androidScheduleMode: AndroidScheduleMode.alarmClock,
+            androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
           );
         }
       }
@@ -254,7 +273,7 @@ class NotificationService {
               : _azanNowBody(prayer.key, prayer.time, langCode),
           scheduledDate: tz.TZDateTime.from(dt, tz.local),
           notificationDetails: details,
-          androidScheduleMode: AndroidScheduleMode.alarmClock,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         );
       }
     }
@@ -328,25 +347,42 @@ class NotificationService {
 
   // ─── Test notification ───────────────────────────────────────────────────
 
-  static Future<void> showTestNotification(String langCode) async {
+  static Future<bool> showTestNotification(String langCode) async {
+    await init();
+    final granted = await requestPermission();
+    if (!granted) return false;
+
     final soundOn        = AppSettings.soundEnabled;
     final azanSoundMode  = AppSettings.azanSoundMode;
     final customSoundUri = AppSettings.customSoundUri;
-    final channelId   = _resolveChannelId(
+    final wantedChannelId   = _resolveChannelId(
         soundOn: soundOn, azanSoundMode: azanSoundMode, customSoundUri: customSoundUri);
-    final channelName = _resolveChannelName(soundOn, azanSoundMode);
-    await _ensureDynamicChannel(
-        channelId: channelId, channelName: channelName,
-        soundOn: soundOn, azanSoundMode: azanSoundMode, customSoundUri: customSoundUri);
+    final wantedChannelName = _resolveChannelName(soundOn, azanSoundMode);
+    try {
+      // _ensureDynamicChannel returns the channel actually created — may differ
+      // from the requested one when the azan raw resource is missing from the APK.
+      final actualChannelId = await _ensureDynamicChannel(
+          channelId: wantedChannelId, channelName: wantedChannelName,
+          soundOn: soundOn, azanSoundMode: azanSoundMode, customSoundUri: customSoundUri);
+      final actualChannelName = _resolveChannelName(soundOn,
+          actualChannelId == wantedChannelId ? azanSoundMode : '');
 
-    await _plugin.show(
-      id: 900001,
-      title: _testTitle(langCode),
-      body: _testBody(langCode),
-      notificationDetails: _buildNotifDetails(
-          soundOn: soundOn, azanSoundMode: azanSoundMode,
-          customSoundUri: customSoundUri, channelId: channelId, channelName: channelName),
-    );
+      await _plugin.show(
+        id: 900001,
+        title: _testTitle(langCode),
+        body: _testBody(langCode),
+        notificationDetails: _buildNotifDetails(
+            soundOn: soundOn,
+            azanSoundMode: actualChannelId == wantedChannelId ? azanSoundMode : '',
+            customSoundUri: customSoundUri,
+            channelId: actualChannelId,
+            channelName: actualChannelName),
+      );
+      return true;
+    } catch (e) {
+      debugPrint('NotificationService: test notification failed — $e');
+      return false;
+    }
   }
 
   // ─── Channel resolution ──────────────────────────────────────────────────
@@ -358,21 +394,19 @@ class NotificationService {
     required String channelId,
     required String channelName,
   }) {
-    final AndroidNotificationSound? androidSound;
+    // iOS still needs an explicit sound reference.
     final String? iosSound;
-
     if (!soundOn) {
-      androidSound = null; iosSound = null;
-    } else if (azanSoundMode == AppSettings.azanSoundModeDefaultAzan) {
-      androidSound = const RawResourceAndroidNotificationSound('azan');
-      iosSound = 'azan.mp3';
-    } else if (azanSoundMode == AppSettings.azanSoundModeCustom && customSoundUri != null) {
-      androidSound = UriAndroidNotificationSound(customSoundUri);
       iosSound = null;
+    } else if (azanSoundMode == AppSettings.azanSoundModeDefaultAzan) {
+      iosSound = 'azan.mp3';
     } else {
-      androidSound = null; iosSound = null;
+      iosSound = null;
     }
 
+    // Android 8.0+: sound is controlled entirely by the channel — specifying
+    // `sound` here causes a redundant getIdentifier() call that throws
+    // invalid_sound when the raw resource is missing from the APK. Omit it.
     return NotificationDetails(
       android: AndroidNotificationDetails(
         channelId, channelName,
@@ -382,7 +416,7 @@ class NotificationService {
         category: AndroidNotificationCategory.alarm,
         icon: '@drawable/ic_stat_namaztime',
         playSound: soundOn,
-        sound: androidSound,
+        // sound: omitted — channel sound takes precedence on Android 8+
         enableVibration: true,
       ),
       iOS: DarwinNotificationDetails(presentSound: soundOn, sound: iosSound),
@@ -410,7 +444,12 @@ class NotificationService {
     return _channelSound;
   }
 
-  static Future<void> _ensureDynamicChannel({
+  /// Creates (or verifies) the notification channel for [channelId].
+  /// Returns the channel ID actually used — falls back to [_channelSound] when
+  /// the azan raw resource is missing from the APK (stale Gradle cache).
+  /// This avoids permanently poisoning [_channelDefaultAzan] with no sound,
+  /// which would happen if we created it without the sound resource.
+  static Future<String> _ensureDynamicChannel({
     required String channelId,
     required String channelName,
     required bool soundOn,
@@ -419,7 +458,7 @@ class NotificationService {
   }) async {
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-    if (androidPlugin == null) return;
+    if (androidPlugin == null) return channelId;
 
     final AndroidNotificationSound? sound;
     if (!soundOn) {
@@ -432,16 +471,45 @@ class NotificationService {
       sound = null;
     }
 
-    await androidPlugin.createNotificationChannel(
-      AndroidNotificationChannel(
-        channelId, channelName,
-        description: 'Reminders for each prayer time',
-        importance: Importance.high,
-        playSound: soundOn,
-        sound: sound,
-        enableVibration: true,
-      ),
-    );
+    try {
+      await androidPlugin.createNotificationChannel(
+        AndroidNotificationChannel(
+          channelId, channelName,
+          description: 'Reminders for each prayer time',
+          importance: Importance.high,
+          playSound: soundOn,
+          sound: sound,
+          enableVibration: true,
+        ),
+      );
+      return channelId;
+    } on PlatformException catch (e) {
+      if (e.code == 'invalid_sound') {
+        // azan.mp3 is not yet compiled into the APK (stale Gradle cache).
+        // Do NOT create the azan channel without sound — it would be locked
+        // permanently silent. Fall back to the standard sound channel so at
+        // least the notification appears. After running:
+        //   flutter clean && cd android && ./gradlew clean && cd .. && flutter run
+        // the azan channel will be created correctly on next launch.
+        debugPrint(
+          'NotificationService: azan.mp3 missing from APK — falling back to '
+          'default sound.\nFix: flutter clean && cd android && ./gradlew clean '
+          '&& cd .. && flutter run',
+        );
+        await androidPlugin.createNotificationChannel(
+          const AndroidNotificationChannel(
+            _channelSound,
+            'Prayer Times',
+            description: 'Reminders for each prayer time',
+            importance: Importance.high,
+            playSound: true,
+            enableVibration: true,
+          ),
+        );
+        return _channelSound; // tell the caller to use this fallback channel
+      }
+      rethrow;
+    }
   }
 
   // ─── Notification text ───────────────────────────────────────────────────
