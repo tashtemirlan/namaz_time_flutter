@@ -98,7 +98,6 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     // Use fixed brand colors — theme extension may not be needed here.
     const deepGreen = Color(0xFF1B3D2A);
-    const midGreen = Color(0xFF2E6645);
 
     return Scaffold(
       backgroundColor: deepGreen,

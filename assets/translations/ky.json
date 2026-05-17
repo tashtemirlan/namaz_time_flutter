@@ -105,6 +105,13 @@
     "method_aladhan": "AlAdhan"
   },
 
+  "notifications": {
+    "test_sent_title": "Сыноо билдирүүсү жөнөтүлдү",
+    "test_sent_message": "Эч нерсе көрүнбөсө, колдонмонун билдирүү жөндөөлөрүн текшериңиз.",
+    "test_failed_title": "Сыноо билдирүүсү иштебеди",
+    "test_failed_message": "Бул түзмөктө билдирүүнү көрсөтүү мүмкүн болгон жок."
+  },
+
   "common": {
     "loading": "Жүктөлүүдө...",
     "error": "Ката",

@@ -105,6 +105,13 @@
     "method_aladhan": "AlAdhan"
   },
 
+  "notifications": {
+    "test_sent_title": "Test notification sent",
+    "test_sent_message": "If nothing appears, check the device notification settings for this app.",
+    "test_failed_title": "Test notification failed",
+    "test_failed_message": "The notification could not be shown on this device."
+  },
+
   "common": {
     "loading": "Loading...",
     "error": "Error",
