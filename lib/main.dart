@@ -8,28 +8,28 @@ import 'providers/prayer_provider.dart';
 import 'providers/settings_provider.dart';
 import 'repositories/prayer_times_repository.dart';
 import 'services/notification_service.dart';
-import 'services/background_refresh_service.dart';
-import 'ui/navigation/app_bottom_nav_bar.dart';
+import 'ui/screens/splash/splash_screen.dart';
 import 'ui/theme/app_theme.dart';
+
+/// App name constants — change here once, reflects everywhere.
+const String kAppName   = 'NamazTime';
+const String kAppNameKy = 'Намаз убактысы';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Hive
+  // ── Fast, local-only init ──────────────────────────────────────────────────
+  // Only work that MUST complete before the first frame goes here.
+  // Network calls and WorkManager setup are deferred to SplashScreen so the
+  // user sees the app UI immediately instead of a white screen.
+
   await Hive.initFlutter();
-
-  // App settings (theme, language, location, notification prefs)
   await AppSettings.init();
-
-  // Easy localization
   await EasyLocalization.ensureInitialized();
 
-  // Notifications
+  // Notification plugin must be initialised before any permission dialog.
   await NotificationService.init();
   await NotificationService.requestPermission();
-  await NotificationService.refreshScheduleForToday();
-  NotificationService.startDailyAutoRefresh();
-  await BackgroundRefreshService.init();
 
   runApp(
     EasyLocalization(
@@ -59,7 +59,7 @@ class NamazTimeApp extends StatelessWidget {
         valueListenable: AppSettings.themeMode,
         builder: (_, themeMode, __) {
           return MaterialApp(
-            title: 'Намаз убактысы',
+            title: kAppName,
             debugShowCheckedModeBanner: false,
             theme:      AppTheme.light,
             darkTheme:  AppTheme.dark,
@@ -67,10 +67,9 @@ class NamazTimeApp extends StatelessWidget {
             locale:              context.locale,
             supportedLocales:    context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
-            home: const DefaultTabController(
-              length: 4,
-              child: AppBottomNavBar(),
-            ),
+            // SplashScreen runs heavy init (network, WorkManager) and then
+            // replaces itself with AppBottomNavBar via pushReplacement.
+            home: const SplashScreen(),
           );
         },
       ),

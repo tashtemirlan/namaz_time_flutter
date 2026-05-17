@@ -220,6 +220,8 @@ class NotificationService {
 
     for (int i = 0; i < prayers.length; i++) {
       final prayer = prayers[i];
+      // Sunrise is an orientation marker only — never send a notification for it.
+      if (prayer.isInformational) continue;
       if (!AppSettings.isPrayerNotifEnabled(prayer.key)) continue;
 
       final dt = prayer.toDateTimeOn(forDate);
@@ -260,15 +262,37 @@ class NotificationService {
 
   /// Fetch tomorrow's times and schedule them into the "tomorrow" ID range
   /// without touching today's already-scheduled notifications.
+  ///
+  /// Falls back to today's cached prayer times when the network is unavailable,
+  /// so Fajr (the first prayer) is always guaranteed a notification even when
+  /// the device is offline or WorkManager is restricted by battery optimisation.
   static void _prescheduleTomorrow(String langCode) {
     () async {
       try {
         final rawLoc = AppSettings.savedLocationJson;
         if (rawLoc == null) return;
+
         final location = AppLocation.fromJson(rawLoc);
-        final repo = PrayerTimesRepository();
+        final repo     = PrayerTimesRepository();
         final tomorrow = _dateOnly(DateTime.now()).add(const Duration(days: 1));
-        final tomorrowTimes = await repo.fetchForLocation(location, date: tomorrow);
+
+        DailyPrayerTimes? tomorrowTimes;
+
+        // Try to fetch tomorrow's exact times from the network.
+        try {
+          tomorrowTimes = await repo.fetchForLocation(location, date: tomorrow);
+        } catch (e) {
+          debugPrint('NotificationService: tomorrow fetch failed, trying cache — $e');
+          // Network unavailable — use today's cached times as a close approximation
+          // (prayer times shift by only ~1–2 min per day, so this is safe).
+          final cachedJson = AppSettings.cachedPrayerTimesJson;
+          if (cachedJson != null) {
+            tomorrowTimes = DailyPrayerTimes.fromCacheJson(cachedJson);
+          }
+        }
+
+        if (tomorrowTimes == null) return;
+
         await _scheduleDayNotifications(
           times: tomorrowTimes,
           langCode: langCode,
