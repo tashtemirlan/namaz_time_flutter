@@ -202,16 +202,6 @@ clean-hive:
 	  echo "✅ App data cleared" || \
 	  echo "❌ No Android emulator/device found — reinstall the app manually on iOS"
 
-# ─── Knowledge Graph ──────────────────────────────────────────────────────────
-
-graphify:
-	@echo "🧠 Rebuilding knowledge graph..."
-	@graphify update .
-	@echo "✅ Graph updated — see graphify-out/GRAPH_REPORT.md"
-
-graphify-report:
-	@cat graphify-out/GRAPH_REPORT.md | head -80
-
 # ─── Help ─────────────────────────────────────────────────────────────────────
 
 help:
@@ -243,11 +233,6 @@ help:
 	@echo "    make generate-icons       Regenerate launcher icons (assets/icon.png)"
 	@echo "    make generate-locales     Validate ru / ky / en translation JSON files"
 	@echo "    make translations-diff    Check key parity across all locale files"
-	@echo ""
-	@echo "  Knowledge Graph:"
-	@echo "    make graphify             Rebuild the codebase knowledge graph"
-	@echo "    make graphify-report      Print top of GRAPH_REPORT.md"
-	@echo ""
 	@echo "  Code Quality:"
 	@echo "    make analyze              Run flutter analyze"
 	@echo "    make format               Auto-format lib/ with dart format"

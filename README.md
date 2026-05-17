@@ -78,7 +78,6 @@ make test               # Run all tests
 make generate-icons     # Regenerate launcher icons from assets/icon.png
 make generate-locales   # Validate all translation JSON files
 make translations-diff  # Check key parity across ru / ky / en
-make graphify           # Rebuild the codebase knowledge graph
 make clean              # Remove build artifacts
 make clean-hive         # Clear Hive app data on Android emulator
 ```
