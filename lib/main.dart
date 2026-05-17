@@ -7,7 +7,6 @@ import 'providers/location_provider.dart';
 import 'providers/prayer_provider.dart';
 import 'providers/settings_provider.dart';
 import 'repositories/prayer_times_repository.dart';
-import 'services/notification_service.dart';
 import 'ui/screens/splash/splash_screen.dart';
 import 'ui/theme/app_theme.dart';
 
@@ -18,18 +17,18 @@ const String kAppNameKy = 'Намаз убактысы';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ── Fast, local-only init ──────────────────────────────────────────────────
-  // Only work that MUST complete before the first frame goes here.
-  // Network calls and WorkManager setup are deferred to SplashScreen so the
-  // user sees the app UI immediately instead of a white screen.
-
+  // ── Absolute minimum before the first frame ────────────────────────────────
+  // Only things that MUST be ready before runApp() go here:
+  //  • Hive — required by AppSettings and any Hive box used in widget build
+  //  • AppSettings — provides theme mode for MaterialApp & language for EasyLocalization
+  //  • EasyLocalization — must wrap the widget tree before it builds
+  //
+  // Everything else (notification plugin, permission dialog, network fetch,
+  // WorkManager) is deferred to SplashScreen so runApp() is called with
+  // minimal delay and the native green window never shows a white flash.
   await Hive.initFlutter();
   await AppSettings.init();
   await EasyLocalization.ensureInitialized();
-
-  // Notification plugin must be initialised before any permission dialog.
-  await NotificationService.init();
-  await NotificationService.requestPermission();
 
   runApp(
     EasyLocalization(

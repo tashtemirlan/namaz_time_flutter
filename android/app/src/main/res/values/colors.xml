@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand green used for the native splash window background.
+         Must match the SplashScreen widget background in Dart. -->
+    <color name="splash_background">#1B3D2A</color>
+</resources>

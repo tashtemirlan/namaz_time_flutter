@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../services/background_refresh_service.dart';
 import '../../../services/notification_service.dart';
+// ignore_for_file: use_build_context_synchronously
 import '../../navigation/app_bottom_nav_bar.dart';
 
 /// Shows while the app performs its heavy first-launch initialization
@@ -45,8 +46,16 @@ class _SplashScreenState extends State<SplashScreen>
     final startTime = DateTime.now();
 
     try {
+      // 1. Init the notification plugin and ask for permission.
+      //    Moved here from main() so runApp() has zero network/plugin awaits.
+      await NotificationService.init();
+      await NotificationService.requestPermission();
+
+      // 2. Fetch today's prayer times and schedule all notifications.
       await NotificationService.refreshScheduleForToday();
       NotificationService.startDailyAutoRefresh();
+
+      // 3. Start WorkManager for background midnight refresh.
       await BackgroundRefreshService.init();
     } catch (e) {
       debugPrint('SplashScreen: init error — $e');
