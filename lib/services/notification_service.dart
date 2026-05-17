@@ -414,6 +414,7 @@ class NotificationService {
         importance: Importance.max,
         priority: Priority.max,
         category: AndroidNotificationCategory.alarm,
+        icon: '@drawable/ic_stat_namaztime',
         playSound: soundOn,
         // sound: omitted — channel sound takes precedence on Android 8+
         enableVibration: true,
